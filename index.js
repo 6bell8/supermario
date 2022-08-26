@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
 const fileUpload = multer({ storage: storage });
 
 app.get("/", (req, res) => {
-  res.render("index", { title: "우당탕탕 우영우" });
+  res.render("index", { title: "슈퍼마리오!" });
 });
 
 app.get("/insert", (req, res) => {
