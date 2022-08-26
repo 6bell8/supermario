@@ -1,0 +1,22 @@
+<%- include("include/header"); %>
+<main id="main">
+  <div id="contents">
+    <h2 class="title"><%= title %></h2>
+    <div class="movieDetail">
+      <img src="<%= result.poster %>" alt="<%= result.title %>" />
+      <div class="movieMain">
+        <ul class="movieDesc">
+          <li class="movieTitle"><%= result.movieTitle %></li>
+          <li><%= result.date %> <span>개봉</span></li>
+          <li><%= result.genre %></li>
+          <li><%= result.desc %></li>
+        </ul>
+        <div class="movieImg"><img src="<%= result.poster %>" alt="<%= result.title %>"</div>
+        <div class="starData">
+          <div class="starIcon"><span class="material-icons"> star</span> <%= result.point %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<%- include("include/footer"); %>

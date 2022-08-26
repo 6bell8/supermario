@@ -1,0 +1,85 @@
+<%- include("include/header"); %>
+<main id="main">
+  <div id="contents">
+    <form action="/register" method="POST" id="join" class="formBox" enctype="multipart/form-data">
+      <div class="inputBox">
+        <label>
+          <span class="label">title</span>
+          <input type="text" id="title" name="title" placeholder="제목을 입력하세요" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span class="label">배경</span>
+          <input type="text" id="bg" name="bg" placeholder="background" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span class="label">설명</span>
+          <textarea name="desc" id="desc"></textarea>
+        </label>
+      </div>
+
+      <div class="inputBox">
+        <label>
+          <span class="label">링크</span>
+          <input type="text" name="link" id="link" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span class="label">카테고리</span>
+          <div>
+            <span>mario</span>
+            <input type="radio" name="category" value="mario" class="category" />
+            <span>monster</span>
+            <input type="radio" name="category" value="monster" class="category" />
+          </div>
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span class="label">대표이미지</span>
+          <input type="file" name="image" id="image" multiple />
+          <!-- multiple을 쓰지않으면 다중 선택이 불가 -->
+        </label>
+      </div>
+      <div class="btns">
+        <button type="submit" id="btnJoin">확인</button>
+        <button type="reset">취소</button>
+      </div>
+    </form>
+  </div>
+</main>
+<script>
+  const date = document.querySelector("#date");
+  const picker = new Lightpick({ field: date, format: "YYYY-MM-DD" });
+  $("#desc").summernote({
+    height: 400,
+    callbacks: {
+      onImageUpload: function (files) {
+        sendImageCloudinary(files[0], this);
+      },
+    },
+  });
+
+  function sendImageCloudinary(file, editor) {
+    const sendImgData = new FormData(); // form태그 없이 post로 data 날리는 방법
+    //서버로 ajax 통해서 데이터를 보내서 server에서 cloudinary에 이미지 업로드를 하고
+    //업로드가 되고 나면은 올라간 이미지의 절대 경로를 결과값으로 받아서 이미지 src로 대체..
+    sendImgData.append("summerNoteImg", file);
+    $.ajax({
+      url: "/summerNoteInsertImg",
+      data: sendImgData,
+      method: "POST",
+      contentType: false, // 이걸 안쓰면 x-www-form-urlencode default
+      processData: false, // queryString 방식으로 가는 걸 막기
+      enctype: "multipart/form-data",
+    }).done((response) => {
+      // console.log(response.cloudinaryImgSrc);
+      $(editor).summernote("editor.insertImage", response.cloudinaryImgSrc);
+    });
+  }
+</script>
+<%- include("include/footer"); %>
